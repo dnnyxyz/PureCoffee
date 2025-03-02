@@ -1,2 +1,2 @@
 # PureCoffee
-Profile Page for my friend
+Profile Page for my friend!
