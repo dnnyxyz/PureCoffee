@@ -330,6 +330,35 @@
             color: rgba(255, 0, 0, 0.8); /* Red on hover */
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Stronger glow on hover */
         }
+
+        /* Countdown Timer Styles */
+        #countdown-timer {
+            position: fixed;
+            bottom: 50px; /* Adjusted to move the timer further down */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #FF0000;
+            text-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000, 0 0 30px #FF0000;
+            z-index: 1000;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .countdown-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FF0000;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkFade 0.5s ease-out forwards;
+            box-shadow: 
+                0 0 2px #FF0000, 
+                0 0 4px #FF0000, 
+                0 0 6px #FF0000;
+            filter: blur(1px);
+            transform: scale(1) rotate(0deg);
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
 </head>
@@ -383,9 +412,15 @@
 
     <div class="ip-display" id="ipDisplay">IP Address: Loading...</div>
 
+    <!-- Countdown Timer -->
+    <div id="countdown-timer">
+        <div>VAC unban timer:</div>
+        <div id="timer"></div>
+    </div>
+
     <!-- Watermark -->
     <div class="watermark">
-        Made by: <a href="https://discord.com/users/964997315368722432" target="_blank">Danny</a>
+        Made by: <a href="https://discord.com/users/YOUR_DISCORD_ID" target="_blank">Danny</a>
     </div>
 
     <script>
@@ -501,6 +536,39 @@
         }
 
         fetchIP();
+
+        // Countdown Timer
+        const timerElement = document.getElementById('timer');
+        const targetDate = new Date('January 18, 2038 22:14:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeRemaining = targetDate - now;
+
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            const milliseconds = Math.floor((timeRemaining % 1000));
+
+            timerElement.innerHTML = `
+                ${days}d ${hours}h ${minutes}m ${seconds}s ${milliseconds}ms
+            `;
+
+            // Create glowing red particles
+            if (Math.random() < 0.5) {
+                const particle = document.createElement('div');
+                particle.classList.add('countdown-particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 500);
+            }
+
+            requestAnimationFrame(updateCountdown);
+        }
+
+        updateCountdown();
     </script>
 </body>
 </html>
